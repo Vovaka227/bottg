@@ -1,17 +1,47 @@
-from kandinskylib import Kandinsky
-from config import api_key, secret_key
-import random
-client = Kandinsky(api_key, secret_key)
-# Generate an image
-def gen_img(prompt = "cat", style = "UHD", negative_prompt = "neon", scale = '3:2'):
-   rnd_name = str(random.randint(1,10000)).zfill(5)
-   path=f"./image/generated_image{rnd_name}.jpg"
-   response = client.generate_image(
-        prompt=prompt,
-        scale=scale,
-        style=style,
-        negative_prompt=negative_prompt,
-        path=f"./image/generated_image{rnd_name}.jpg"
+from telebot import TeleBot
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton
+import threading
+import time
+
+def get_week_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(
+        InlineKeyboardButton("Четная неделя", callback_data="even_week"),
+        InlineKeyboardButton("Нечетная неделя", callback_data="odd_week")
     )
-   return f"./image/generated_image{rnd_name}.jpg"
-#print(generate_image(prompt="A cat in sunglasses", style="UHD", negative_prompt="Bright colors, neon colors", scale='3:2'))
+    return markup
+
+def get_back_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(InlineKeyboardButton("Вернуться в меню", callback_data="back_to_menu"))
+    return markup
+
+def get_even_day_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(InlineKeyboardButton("Понедельник", callback_data="even_week_monday"))
+    markup.row(InlineKeyboardButton("Вторник", callback_data="even_week_tuesday"))
+    markup.row(InlineKeyboardButton("Среда", callback_data="even_week_wednesday"))
+    markup.row(InlineKeyboardButton("Четверг", callback_data="even_week_thursday"))
+    markup.row(InlineKeyboardButton("Пятница", callback_data="even_week_friday"))
+    markup.row(InlineKeyboardButton("Суббота", callback_data="even_week_saturday"))
+    markup.row(InlineKeyboardButton("Вернуться в меню", callback_data="back_to_menu"))
+    return markup
+
+def get_odd_day_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(InlineKeyboardButton("Понедельник", callback_data="odd_week_monday"))
+    markup.row(InlineKeyboardButton("Вторник", callback_data="odd_week_tuesday"))
+    markup.row(InlineKeyboardButton("Среда", callback_data="odd_week_wednesday"))
+    markup.row(InlineKeyboardButton("Четверг", callback_data="odd_week_thursday"))
+    markup.row(InlineKeyboardButton("Пятница", callback_data="odd_week_friday"))
+    markup.row(InlineKeyboardButton("Суббота", callback_data="odd_week_saturday"))
+    markup.row(InlineKeyboardButton("Вернуться в меню", callback_data="back_to_menu"))
+    return markup
+def get_back_even_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(InlineKeyboardButton("Вернуться к выбору дня", callback_data="even_week"))
+    return markup
+def get_back_odd_keyboard():
+    markup = InlineKeyboardMarkup()
+    markup.row(InlineKeyboardButton("Вернуться к выбору дня", callback_data="odd_week"))
+    return markup
